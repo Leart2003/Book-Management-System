@@ -1,3 +1,6 @@
 <Solution>
-  <Project Path="Book Management System/Book Management System.csproj" />
+  <Project Path="Application/Application.csproj" Id="d7a1b186-ecb7-433d-9e80-e6d76b7c1bde" />
+  <Project Path="Book Management System/Book Management System-API.csproj" />
+  <Project Path="Domain/Domain.csproj" Id="29abb7ce-71d6-4fbc-99ee-d21cbdf3b1f1" />
+  <Project Path="Infrastructure/Infrastructure.csproj" Id="c7f5c869-3f47-4eed-b6f0-61dc50354466" />
 </Solution>
