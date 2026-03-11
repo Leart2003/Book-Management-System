@@ -3,44 +3,49 @@ using System.Collections.Generic;
 using System.Text;
 using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repository
 {
     public class BookRepository : IBookRepository
     {
         private readonly ApplicationDbContext _context;
+
         public BookRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public Task AddAsync(Book book)
+        public async Task<IEnumerable<Book>> GetBooksAsync()
         {
-            throw new NotImplementedException();
+           return await _context.Books.ToListAsync();
         }
 
-        public Task DeleteAsync(int id)
+        public async Task<Book?> GetByIdAsync(int id) =>
+            await _context.Books.FindAsync(id);
+
+        public async Task AddAsync(Book book)
         {
-            throw new NotImplementedException();
+            await _context.Books.AddAsync(book);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<Book>> GetBooksAsync()
+        public async Task UpdateAsync(Book book)
         {
-            throw new NotImplementedException();
+            _context.Books.Update(book);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<Book?> GetByIdAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var book = await GetByIdAsync(id);
+            if (book is not null)
+            {
+                _context.Books.Remove(book);
+                await _context.SaveChangesAsync();
+            }
         }
 
-        public Task UpdateAsync(Book book)
-        {
-            throw new NotImplementedException();
-        }
+      
     }
-
-   
-
-    }
-
+}

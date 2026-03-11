@@ -18,7 +18,7 @@ namespace Domain.Entities
 
         public int AuthorId { get; set; }
         public int CategoryId { get; set; }
-        public Author Author { get; set; } = null!;
-        public Category Category { get; set; } = null!;
+        public Author? Author { get; set; } = null!;
+        public Category? Category { get; set; } = null!;
     }
 }

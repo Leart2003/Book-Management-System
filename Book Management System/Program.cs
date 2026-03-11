@@ -1,5 +1,5 @@
 using Domain.Interfaces;
-using Infrastructure.Persistence;
+//using Infrastructure.Persistence;
 using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +13,12 @@ namespace Book_Management_System
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler =
+            System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<IBookRepository, BookRepository>();

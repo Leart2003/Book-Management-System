@@ -12,6 +12,12 @@ namespace Domain.Entities
         public string Bio { get; set; } = string.Empty;
 
         // Navigation Property
+        public int AuthorId { get; set; }
+        public int CategoryId { get; set; }
+
+        // Navigation Properties - make them nullable with ?
+        public Author? author { get; set; }
+        public Category? Category { get; set; }
         public ICollection<Book> Books { get; set; } = new List<Book>();
     }
 }
