@@ -45,9 +45,14 @@ namespace Infrastructure.Repository
             await _context.SaveChangesAsync();
         }
 
-        async Task<IEnumerable<Author>> IAuthorRepository.GetAllAsync()
+        async Task<IEnumerable<Author>> GetAllAsync()
         {
             return await  _context.Authors.ToListAsync();
+        }
+
+        Task<IEnumerable<Author>> IAuthorRepository.GetAllAsync()
+        {
+            return GetAllAsync();
         }
     }
 }
