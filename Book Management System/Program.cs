@@ -22,6 +22,9 @@ namespace Book_Management_System
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<IBookRepository, BookRepository>();
+            builder.Services.AddScoped<ICategoryRepository, CategoriesRepository>();
+            builder.Services.AddScoped<IAuthorRepository, AuthorRepository> ();
+            
 
             var app = builder.Build();
 
