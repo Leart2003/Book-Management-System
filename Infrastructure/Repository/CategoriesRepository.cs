@@ -19,11 +19,17 @@ namespace Infrastructure.Repository
         public async Task AddAsync(Category category)
         {
             await _context.Categories.AddAsync(category);
+            await _context.SaveChangesAsync();
         }
 
-        public Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var category = await GetAsyncById(id);
+            if (category is not null)
+            {
+                _context.Categories.Remove(category);
+                await _context.SaveChangesAsync();  
+            }
         }
 
         public async Task<IEnumerable<Category>> GetAllAsync()
@@ -31,14 +37,15 @@ namespace Infrastructure.Repository
             return await _context.Categories.ToListAsync();
         }
 
-        public Task<Category> GetAsyncById(int id)
+        public async Task<Category?> GetAsyncById(int id)
         {
-            throw new NotImplementedException();
+           return await _context.Categories.FindAsync(id);
         }
 
-        public Task UpdateAsync(Category category)
+        public async Task UpdateAsync(Category category)
         {
-            throw new NotImplementedException();
+            _context.Categories.Update(category);
+            await _context.SaveChangesAsync();
         }
     }
 }
