@@ -1,7 +1,14 @@
+using Domain.Entities;
 using Domain.Interfaces;
 //using Infrastructure.Persistence;
 using Infrastructure.Repository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.IdentityModel.Tokens.Experimental;
+using System.Text;
 
 namespace Book_Management_System
 {
@@ -24,7 +31,31 @@ namespace Book_Management_System
             builder.Services.AddScoped<IBookRepository, BookRepository>();
             builder.Services.AddScoped<ICategoryRepository, CategoriesRepository>();
             builder.Services.AddScoped<IAuthorRepository, AuthorRepository> ();
-            
+            builder.Services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+            //JWT
+            var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+            var secret = jwtSettings["Secret"];
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidIssuer = jwtSettings["Issuer"],
+                        ValidAudience = jwtSettings["Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret!))
+                    };
+                });
+
 
             var app = builder.Build();
 
@@ -36,6 +67,7 @@ namespace Book_Management_System
 
             app.UseHttpsRedirection();
             app.UseAuthorization();
+            app.UseAuthentication();
             app.MapControllers();
             app.Run();
         }
