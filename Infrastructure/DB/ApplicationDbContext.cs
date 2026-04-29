@@ -8,6 +8,7 @@ using System.Text;
 
 
 
+
 public class ApplicationDbContext : IdentityDbContext<User>
 {
     
@@ -19,6 +20,8 @@ public class ApplicationDbContext : IdentityDbContext<User>
     public DbSet<Book> Books => Set<Book>();
     public DbSet<Author> Authors => Set<Author>();
     public DbSet<Category> Categories => Set<Category>();
+    
+  
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
