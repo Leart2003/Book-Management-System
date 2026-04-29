@@ -1,6 +1,6 @@
+using Application.Services;
 using Domain.Entities;
 using Domain.Interfaces;
-//using Infrastructure.Persistence;
 using Infrastructure.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -31,7 +31,9 @@ namespace Book_Management_System
             builder.Services.AddScoped<IBookRepository, BookRepository>();
             builder.Services.AddScoped<ICategoryRepository, CategoriesRepository>();
             builder.Services.AddScoped<IAuthorRepository, AuthorRepository> ();
+            builder.Services.AddScoped<BookService>();
             builder.Services.AddIdentity<User, IdentityRole>()
+
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
             //JWT
@@ -64,11 +66,11 @@ namespace Book_Management_System
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.UseAuthentication();
             app.MapControllers();
+            app.UseStaticFiles();
             app.Run();
         }
     }

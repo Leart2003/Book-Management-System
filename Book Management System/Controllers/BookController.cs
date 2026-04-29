@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Application.Services;
+using Domain.Dtos;
 using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Application.Services;
 
 namespace Book_Management_System.Controllers
 {
@@ -9,17 +12,17 @@ namespace Book_Management_System.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
-        private readonly IBookRepository _bookRepository;
+        private readonly BookService _bookService;
 
-        public BookController(IBookRepository bookRepository)
+        public BookController(BookService bookService)
         {
-            _bookRepository = bookRepository;
+            _bookService = bookService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var books = await _bookRepository.GetBooksAsync();
+            var books = await _bookService.GetAllBooksAsync();
 
             return Ok(books);
             
@@ -28,7 +31,7 @@ namespace Book_Management_System.Controllers
 
         public async Task<IActionResult> GetById(int id)
         {
-            var book = await _bookRepository.GetByIdAsync(id);
+            var book = await _bookService.GetBookByIdAsync(id);
 
             if (book is null)
             {
@@ -39,10 +42,9 @@ namespace Book_Management_System.Controllers
 
         }
         [HttpPost]
-        public async Task<IActionResult> Create(Book book)
+        public async Task<IActionResult> Create([FromForm]BookDto bookDto)
         {
-            await _bookRepository.AddAsync(book);
-
+            var book = await _bookService.CreateBook(bookDto);
             return CreatedAtAction(nameof(GetById), new { id = book.Id }, book);
         }
         [HttpPut("{id}")]
@@ -52,13 +54,13 @@ namespace Book_Management_System.Controllers
             {
                 return BadRequest();
             }
-            await _bookRepository.UpdateAsync(book);
+            await _bookService.UpdateBookAsync(book);
             return NoContent();
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _bookRepository.DeleteAsync(id);
+            await _bookService.DeleteBookAsync(id);
             return NoContent();
         }
 
