@@ -1,22 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Domain.Dtos;
-using Microsoft.AspNetCore.Identity;
-using Domain.Entities;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Book_Management_System.Controllers
 {
-    public class AuthController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AuthController : ControllerBase
     {
-        private readonly UserManager<User> _userManager;
-        private readonly IConfiguration _configuration;
-        public AuthController(IConfiguration configuration, UserManager<User> userManager)
-        {
-            _configuration = configuration;
-            _userManager = userManager;
-        }
-        public IActionResult Index()
-        {
-            return View();
-        }
     }
 }
