@@ -13,7 +13,7 @@ namespace Domain.Interfaces
 
         Task AddToFavorite(Favorite favorite);
 
-        Task RemoveFromFavorite(Favorite favorite);
+        Task RemoveFromFavorite(int favoriteId);
 
         Task<bool> IsFavoriteAsync(string userId, int bookId);
 

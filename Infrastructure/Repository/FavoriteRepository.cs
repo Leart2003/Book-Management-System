@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,21 +20,33 @@ namespace Infrastructure.Repository
         public async Task AddToFavorite(Favorite favorite)
         {
           await _dbContext.Favorites.AddAsync(favorite);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<Favorite>> GetUserFavoriteAsync(string userID)
+        public async Task<IEnumerable<Favorite>> GetUserFavoriteAsync(string userID)
         {
-            throw new NotImplementedException();
+          return await _dbContext.Favorites.Include(f => f.Book)
+                .Where(f => f.UserId == userID)
+                .ToListAsync();
         }
 
-        public Task<bool> IsFavoriteAsync(string userId, int bookId)
+        public async Task<bool> IsFavoriteAsync(string userId, int bookId)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Favorites
+              .AnyAsync(f => f.UserId == userId && f.BookId == bookId);
         }
 
-        public Task RemoveFromFavorite(Favorite favorite)
+        public async Task RemoveFromFavorite(int favoriteId)
         {
-            throw new NotImplementedException();
+            var favorites = await _dbContext.Favorites.FindAsync(favoriteId);
+
+            if (favorites != null)
+            {
+                _dbContext.Favorites.Remove(favorites);
+                await _dbContext.SaveChangesAsync();
+            }
         }
+
+       
     }
 }

@@ -32,6 +32,10 @@ namespace Book_Management_System
             builder.Services.AddScoped<ICategoryRepository, CategoriesRepository>();
             builder.Services.AddScoped<IAuthorRepository, AuthorRepository> ();
             builder.Services.AddScoped<BookService>();
+            builder.Services.AddScoped<IFavorite, FavoriteRepository>();
+            builder.Services.AddScoped<BookService>();
+
+            //Identity
             builder.Services.AddIdentity<User, IdentityRole>()
 
                 .AddEntityFrameworkStores<ApplicationDbContext>()
