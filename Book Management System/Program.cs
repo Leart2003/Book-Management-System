@@ -34,6 +34,8 @@ namespace Book_Management_System
             builder.Services.AddScoped<BookService>();
             builder.Services.AddScoped<IFavorite, FavoriteRepository>();
             builder.Services.AddScoped<BookService>();
+            builder.Services.AddScoped<IFavorite, FavoriteRepository>();
+            builder.Services.AddScoped<FavoriteService>();
 
             //Identity
             builder.Services.AddIdentity<User, IdentityRole>()

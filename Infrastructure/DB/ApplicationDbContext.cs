@@ -22,7 +22,10 @@ public class ApplicationDbContext : IdentityDbContext<User>
     public DbSet<Category> Categories => Set<Category>();
 
     public DbSet<Favorite> Favorites => Set<Favorite>();
-    
+
+    public DbSet<Order> Orders => Set<Order>();
+
+    public DbSet<OrderItem> OrderItems => Set<OrderItem>();
   
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
