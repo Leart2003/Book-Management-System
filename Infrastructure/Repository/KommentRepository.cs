@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -33,9 +34,14 @@ namespace Infrastructure.Repository
           
         }
 
-        public Task<IEnumerable<Komment>> GetCommentsAsync(int bookId)
+        public async Task<IEnumerable<Komment>> GetCommentsAsync(int bookId)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Comments
+                 .Include(c => c.User)
+                 .Where(c => c.BookId == bookId)
+                 .OrderByDescending(c => c.CreatedAt)
+                 .ToListAsync();
+
         }
     }
 }

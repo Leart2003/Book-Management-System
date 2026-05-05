@@ -39,6 +39,8 @@ namespace Book_Management_System
             builder.Services.AddScoped<FavoriteService>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<OrderService>();
+            builder.Services.AddScoped<IKommentRepository, KommentRepository>();
+            builder.Services.AddScoped<KommentService>();
 
             //Identity
             builder.Services.AddIdentity<User, IdentityRole>()
