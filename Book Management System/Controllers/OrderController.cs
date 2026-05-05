@@ -9,12 +9,12 @@ namespace Book_Management_System.Controllers
     [ApiController]
 
 
-    public class ValuesController : ControllerBase
+    public class OrderController : ControllerBase
 
     {
         private readonly OrderService _orderService;
 
-        public ValuesController(OrderService orderService)
+        public OrderController(OrderService orderService)
         {
             _orderService = orderService;
         }
@@ -33,7 +33,7 @@ namespace Book_Management_System.Controllers
             return Ok (order);
         }
 
-        [HttpGet]
+        [HttpGet("{orderId}")]
 
         public async Task<IActionResult> GetOrderID(int orderId)
         {

@@ -32,7 +32,7 @@ namespace Book_Management_System.Controllers
         public async Task<IActionResult> PostComment(Komment komment)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId != null)
+            if (userId == null)
             {
                 return Unauthorized();
             }
