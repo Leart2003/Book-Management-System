@@ -21,7 +21,7 @@ namespace Book_Management_System.Controllers
         public async Task<IActionResult> GetUserFavorite()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId is not null)
+            if (userId == null)
             {
                 return Unauthorized();
             }
@@ -63,7 +63,7 @@ namespace Book_Management_System.Controllers
             {
                 return Unauthorized();   
             }
-            var isFavorite = _favoriteService.IsFavoriteAsync(userId,bookId );
+            var isFavorite = await  _favoriteService.IsFavoriteAsync(userId,bookId );
 
             return Ok(IsFavorite);
         }

@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Interfaces;
 using Infrastructure.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,9 +13,9 @@ namespace Book_Management_System.Controllers
     [ApiController]
     public class CommentController : ControllerBase
     {
-        private readonly KommentRepository _repository;
+        private readonly IKommentRepository _repository;
 
-        public CommentController(KommentRepository kommentRepository)
+        public CommentController(IKommentRepository kommentRepository)
         {
             _repository = kommentRepository;
         }
@@ -29,17 +30,23 @@ namespace Book_Management_System.Controllers
 
         [HttpPost("{bookId}")]
 
-        public async Task<IActionResult> PostComment(Komment komment)
+        public async Task<IActionResult> PostComment(int bookId, [FromBody] string content)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            if (userId == null) return Unauthorized();
+
+            var comment = new Komment
             {
-                return Unauthorized();
-            }
-            await _repository.AddCommentAsync(komment);
-            return Ok("Comment added succesfully");
+                UserId = userId,
+                BookId = bookId,
+                Content = content,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await _repository.AddCommentAsync(comment);
+            return Ok("Comment added successfully!");
         }
-        [HttpDelete]
+        [HttpDelete("{commentId}")]
         public async Task<IActionResult> DeleteComment(int comment)
         {
             await _repository.DeleteCommentAsync(comment);

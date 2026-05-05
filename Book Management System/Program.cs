@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.IdentityModel.Tokens.Experimental;
 using System.Text;
 
 namespace Book_Management_System
@@ -19,7 +18,9 @@ namespace Book_Management_System
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddEndpointsApiExplorer();
+         
             builder.Services.AddSwaggerGen();
+
             builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -41,6 +42,7 @@ namespace Book_Management_System
             builder.Services.AddScoped<OrderService>();
             builder.Services.AddScoped<IKommentRepository, KommentRepository>();
             builder.Services.AddScoped<KommentService>();
+
 
             //Identity
             builder.Services.AddIdentity<User, IdentityRole>()
@@ -70,6 +72,10 @@ namespace Book_Management_System
                 });
 
 
+
+
+
+
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
@@ -78,8 +84,9 @@ namespace Book_Management_System
                 app.UseSwaggerUI();
             }
             app.UseHttpsRedirection();
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
+         
             app.MapControllers();
             app.UseStaticFiles();
             app.Run();
