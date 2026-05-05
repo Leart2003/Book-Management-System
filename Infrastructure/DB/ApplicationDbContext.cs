@@ -26,7 +26,9 @@ public class ApplicationDbContext : IdentityDbContext<User>
     public DbSet<Order> Orders => Set<Order>();
 
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
-  
+
+    public DbSet<Komment> Comments => Set<Komment>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

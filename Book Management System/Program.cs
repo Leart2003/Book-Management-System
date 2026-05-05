@@ -26,6 +26,7 @@ namespace Book_Management_System
         options.JsonSerializerOptions.ReferenceHandler =
             System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
+            //Services
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<IBookRepository, BookRepository>();
@@ -36,6 +37,8 @@ namespace Book_Management_System
             builder.Services.AddScoped<BookService>();
             builder.Services.AddScoped<IFavorite, FavoriteRepository>();
             builder.Services.AddScoped<FavoriteService>();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<OrderService>();
 
             //Identity
             builder.Services.AddIdentity<User, IdentityRole>()
