@@ -29,6 +29,7 @@ public class ApplicationDbContext : IdentityDbContext<User>
 
     public DbSet<Komment> Comments => Set<Komment>();
 
+    public DbSet<Rating> Rating => Set<Rating>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

@@ -22,5 +22,6 @@ namespace Domain.Entities
         public int CategoryId { get; set; }
         public Author? Author { get; set; } = null!;
         public Category? Category { get; set; } = null!;
+        public ICollection<Rating> Ratings { get; set; } = new List<Rating>();
     }
 }
