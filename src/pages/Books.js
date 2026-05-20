@@ -16,7 +16,7 @@ function Books() {
   }
 
   return (
-    <div className="container-fluid bg-dark min-vh-100 text-white p-4">
+    <div className="container-fluid bg-dark text-white p-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2>📚 Book Management</h2>
         <button className="btn btn-outline-light" onClick={handleLogout}>
