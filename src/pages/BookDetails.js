@@ -38,6 +38,10 @@ function BookDetails() {
       setAverageRating(res.data.averageRating),
     )
   }
+  const handleFavorite = async () => {
+    await API.post(`/Favorite?bookId=${id}`)
+    alert("Added to favorites!")
+  }
 
   if (!book)
     return (
@@ -61,6 +65,20 @@ function BookDetails() {
         }}
         className="px-4 py-3 d-flex align-items-center gap-3"
       >
+        <button
+          onClick={handleFavorite}
+          style={{
+            backgroundColor: "#ff4d4d",
+            border: "none",
+            borderRadius: "8px",
+            padding: "10px 20px",
+            color: "#fff",
+            fontWeight: "bold",
+            cursor: "pointer",
+          }}
+        >
+          ❤️ Add to Favorites
+        </button>
         <button
           className="btn btn-sm"
           style={{ backgroundColor: "#2a2a2a", color: "#fff", border: "none" }}

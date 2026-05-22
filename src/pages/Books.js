@@ -10,17 +10,23 @@ function Books() {
     API.get("/Book").then((res) => setBooks(res.data))
   }, [])
 
-  const handleLogout = () => {
-    localStorage.removeItem("token")
-    navigate("/login")
-  }
-
   return (
     <div className="container-fluid bg-dark text-white p-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>📚 Book Management</h2>
-        <button className="btn btn-outline-light" onClick={handleLogout}>
-          Logout
+        <h4>All Books</h4>
+        <button
+          onClick={() => navigate("/books/add")}
+          style={{
+            backgroundColor: "#6c63ff",
+            border: "none",
+            borderRadius: "8px",
+            padding: "8px 16px",
+            color: "#fff",
+            fontWeight: "bold",
+            cursor: "pointer",
+          }}
+        >
+          ➕ Add Book
         </button>
       </div>
 

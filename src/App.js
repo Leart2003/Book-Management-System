@@ -6,10 +6,13 @@ import Header from "./Components/header"
 import Footer from "./Components/Footer"
 import { useLocation } from "react-router-dom"
 import AddBook from "./pages/AddBook"
+import Register from "./pages/Register"
+import Favorites from "./pages/Favorites"
 
 function Layout() {
   const location = useLocation()
-  const hideHeader = location.pathname === "/login"
+  const hideHeader =
+    location.pathname === "/login" || location.pathname === "/register"
 
   return (
     <>
@@ -17,7 +20,9 @@ function Layout() {
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/books" element={<Books />} />
+        <Route path="/favorites" element={<Favorites />} />
         <Route path="/books/add" element={<AddBook />} />
         <Route path="/books/:id" element={<BookDetails />} />
       </Routes>

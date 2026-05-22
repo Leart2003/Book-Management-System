@@ -13,6 +13,8 @@ function AddBook() {
   const [form, setForm] = useState({
     title: "",
     description: "",
+    price: "",
+    publishedYear: "",
     authorId: "",
     categoryId: "",
   })
@@ -27,7 +29,13 @@ function AddBook() {
   }
 
   const handleSubmit = async () => {
-    if (!form.title || !form.authorId || !form.categoryId) {
+    if (
+      !form.title ||
+      !form.authorId ||
+      !form.categoryId ||
+      !form.price ||
+      !form.publishedYear
+    ) {
       setError("Please fill in all required fields.")
       return
     }
@@ -36,9 +44,11 @@ function AddBook() {
       const formData = new FormData()
       formData.append("title", form.title)
       formData.append("description", form.description)
+      formData.append("price", form.price)
+      formData.append("publishedYear", form.publishedYear)
       formData.append("authorId", form.authorId)
       formData.append("categoryId", form.categoryId)
-      if (image) formData.append("image", image)
+      if (image) formData.append("imageFile", image)
 
       await API.post("/Book", formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -83,7 +93,6 @@ function AddBook() {
             {error}
           </div>
         )}
-
         {success && (
           <div
             style={{
@@ -160,6 +169,68 @@ function AddBook() {
               resize: "vertical",
             }}
           />
+        </div>
+
+        {/* Price and Year */}
+        <div className="d-flex gap-3" style={{ marginBottom: "20px" }}>
+          <div style={{ flex: 1 }}>
+            <label
+              style={{
+                fontSize: "13px",
+                color: "#aaa",
+                marginBottom: "8px",
+                display: "block",
+              }}
+            >
+              PRICE *
+            </label>
+            <input
+              name="price"
+              type="number"
+              value={form.price}
+              onChange={handleChange}
+              placeholder="0.00"
+              style={{
+                width: "100%",
+                backgroundColor: "#1a1a1a",
+                border: "1px solid #2a2a2a",
+                borderRadius: "8px",
+                padding: "12px 16px",
+                color: "#fff",
+                outline: "none",
+                fontSize: "14px",
+              }}
+            />
+          </div>
+          <div style={{ flex: 1 }}>
+            <label
+              style={{
+                fontSize: "13px",
+                color: "#aaa",
+                marginBottom: "8px",
+                display: "block",
+              }}
+            >
+              PUBLISHED YEAR *
+            </label>
+            <input
+              name="publishedYear"
+              type="number"
+              value={form.publishedYear}
+              onChange={handleChange}
+              placeholder="2024"
+              style={{
+                width: "100%",
+                backgroundColor: "#1a1a1a",
+                border: "1px solid #2a2a2a",
+                borderRadius: "8px",
+                padding: "12px 16px",
+                color: "#fff",
+                outline: "none",
+                fontSize: "14px",
+              }}
+            />
+          </div>
         </div>
 
         {/* Author */}

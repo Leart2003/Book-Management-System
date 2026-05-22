@@ -1,0 +1,441 @@
+.duka-books-page {
+  min-height: 100vh;
+  background: #fff;
+  color: #252830;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+}
+
+.duka-topbar {
+  background: #fff;
+  border-top: 3px solid #2b2b2b;
+  box-shadow: 0 8px 18px rgba(30, 35, 45, 0.08);
+}
+
+.duka-nav {
+  min-height: 96px;
+}
+
+.duka-brand,
+.duka-menu button,
+.duka-account,
+.duka-add-btn,
+.duka-breadcrumb button {
+  background: transparent;
+  border: 0;
+  color: inherit;
+  font: inherit;
+}
+
+.duka-brand {
+  letter-spacing: 3px;
+  font-size: 24px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.duka-menu {
+  flex: 1;
+  gap: clamp(20px, 3vw, 62px);
+  margin: 0 34px;
+}
+
+.duka-menu button {
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.duka-account {
+  color: #666;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+.duka-add-btn {
+  align-items: center;
+  border: 1px solid #e0505a;
+  border-radius: 999px;
+  color: #e0505a;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 9px 18px;
+}
+
+.duka-user-icon {
+  width: 24px;
+  height: 24px;
+  border: 1px solid #777;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+}
+
+.duka-user-icon::before,
+.duka-user-icon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 1px solid #777;
+}
+
+.duka-user-icon::before {
+  top: 5px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.duka-user-icon::after {
+  bottom: 4px;
+  width: 13px;
+  height: 7px;
+  border-radius: 10px 10px 0 0;
+  border-bottom: 0;
+}
+
+.duka-search-band {
+  background: #fff;
+  padding: 32px 0;
+  box-shadow: 0 8px 15px rgba(30, 35, 45, 0.06);
+}
+
+.duka-search {
+  max-width: 970px;
+  height: 46px;
+  margin: 0 auto;
+  border: 0;
+  border-radius: 999px;
+  background: #ededed;
+  color: #596273;
+  font-size: 17px;
+  padding: 0 18px;
+}
+
+.duka-search:focus {
+  background: #ededed;
+  box-shadow: 0 0 0 4px rgba(224, 80, 90, 0.14);
+}
+
+.duka-breadcrumb-band {
+  background: #fff;
+  border-top: 1px solid #f1f1f1;
+  color: #626b7a;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 0;
+}
+
+.duka-breadcrumb button,
+.duka-home {
+  border-right: 1px solid #40516a;
+  color: #667184;
+  line-height: 1;
+  padding: 0 10px 0 0;
+}
+
+.duka-breadcrumb button.active {
+  color: #e0505a;
+}
+
+.duka-product-list {
+  padding-top: 46px;
+  padding-bottom: 58px;
+}
+
+.duka-product {
+  align-items: flex-start;
+  margin-bottom: 70px;
+}
+
+.duka-cover-wrap {
+  width: min(350px, 100%);
+  margin: 48px auto 0;
+  position: relative;
+}
+
+.duka-cover {
+  width: 100%;
+  aspect-ratio: 0.55;
+  border-radius: 8px;
+  display: block;
+  object-fit: cover;
+  box-shadow: 0 8px 20px rgba(25, 25, 25, 0.1);
+}
+
+.duka-cover-placeholder {
+  background: linear-gradient(135deg, #353943, #9e4953);
+  color: #fff;
+  display: grid;
+  place-items: center;
+}
+
+.duka-cover-placeholder span {
+  font-size: 96px;
+  font-weight: 800;
+}
+
+.duka-delivery,
+.duka-badge {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+}
+
+.duka-delivery {
+  top: 0;
+  left: 0;
+  min-width: 60px;
+  height: 34px;
+  border-radius: 4px;
+  background: #fff;
+  color: #222;
+  box-shadow: 0 5px 12px rgba(30, 35, 45, 0.16);
+}
+
+.duka-badge {
+  top: 18px;
+  right: -18px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #de6290;
+  color: #fff;
+}
+
+.duka-product-info {
+  max-width: 535px;
+}
+
+.duka-product-info h1 {
+  margin: 0 0 8px;
+  color: #050505;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.duka-author,
+.duka-stock,
+.duka-publisher {
+  color: #e0505a;
+  font-weight: 800;
+}
+
+.duka-author {
+  margin-bottom: 4px;
+  letter-spacing: 1px;
+}
+
+.duka-heart {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  background: transparent;
+  color: #b7bcc4;
+  font-size: 23px;
+  line-height: 1;
+}
+
+.duka-rating {
+  gap: 16px;
+  margin: 4px 0;
+}
+
+.duka-stars {
+  color: #f5a400;
+  font-size: 22px;
+  letter-spacing: 4px;
+  white-space: nowrap;
+}
+
+.duka-review-count {
+  border-right: 1px solid #eeeeee;
+  color: #a8acb5;
+  display: inline-flex;
+  max-width: 105px;
+  padding-right: 22px;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.duka-format {
+  color: #5f6672;
+  font-size: 17px;
+  font-weight: 800;
+  margin: 4px 0 0;
+}
+
+.duka-price {
+  color: #262a32;
+  font-size: 40px;
+  font-weight: 900;
+  line-height: 1.2;
+  margin: 2px 0 8px;
+}
+
+.duka-buy-row {
+  margin: 6px 0 48px;
+}
+
+.duka-quantity {
+  width: 122px;
+  height: 29px;
+  border: 1px solid #ececec;
+  border-radius: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  overflow: hidden;
+}
+
+.duka-quantity button,
+.duka-quantity span {
+  border: 0;
+  background: #f9f9f9;
+  color: #152036;
+  display: grid;
+  place-items: center;
+}
+
+.duka-quantity span {
+  background: #efefef;
+}
+
+.duka-format-pill {
+  min-width: 238px;
+  border-radius: 999px;
+  background: #ededed;
+  color: #121620;
+  font-size: 17px;
+  font-weight: 800;
+  padding: 5px 22px;
+  text-align: center;
+}
+
+.duka-stock {
+  font-size: 16px;
+}
+
+.duka-cart-btn {
+  width: 100%;
+  min-height: 44px;
+  border: 0;
+  border-radius: 2px;
+  background: #df555f;
+  color: #fff;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.duka-cart-btn:hover,
+.duka-add-btn:hover {
+  background: #c9454f;
+  color: #fff;
+}
+
+.duka-meta {
+  border-top: 1px solid #dedede;
+  margin-top: 40px;
+  padding-top: 28px;
+  color: #737988;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.duka-meta p {
+  margin-bottom: 6px;
+}
+
+.duka-meta strong {
+  color: #666d7a;
+}
+
+.duka-publisher {
+  color: #e0505a;
+}
+
+.duka-empty {
+  padding: 120px 20px;
+}
+
+.duka-empty h2 {
+  font-weight: 800;
+}
+
+.duka-floating-actions {
+  position: fixed;
+  right: 42px;
+  bottom: 46px;
+  display: flex;
+  gap: 12px;
+  z-index: 10;
+}
+
+.duka-floating-actions button {
+  width: 49px;
+  height: 49px;
+  border: 1px solid #e4e4e4;
+  border-radius: 7px;
+  background: #fff;
+  color: #555;
+  box-shadow: 0 8px 18px rgba(25, 25, 25, 0.16);
+  font-size: 25px;
+}
+
+@media (max-width: 1199px) {
+  .duka-brand {
+    font-size: 20px;
+  }
+
+  .duka-product-info {
+    max-width: none;
+  }
+}
+
+@media (max-width: 991px) {
+  .duka-nav {
+    min-height: 78px;
+  }
+
+  .duka-product-list {
+    padding-top: 20px;
+  }
+
+  .duka-cover-wrap {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 575px) {
+  .duka-brand {
+    font-size: 15px;
+    letter-spacing: 1.5px;
+  }
+
+  .duka-account {
+    font-size: 0;
+  }
+
+  .duka-product-info h1 {
+    font-size: 23px;
+  }
+
+  .duka-price {
+    font-size: 34px;
+  }
+
+  .duka-format-pill,
+  .duka-cart-btn {
+    width: 100%;
+  }
+
+  .duka-floating-actions {
+    right: 18px;
+    bottom: 20px;
+  }
+}
