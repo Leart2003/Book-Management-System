@@ -20,7 +20,7 @@ namespace Book_Management_System.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var authors = _authorRepository.GetAllAsync();
+            var authors = await _authorRepository.GetAllAsync();
 
             return Ok(authors); 
         }

@@ -19,8 +19,7 @@ namespace Domain.Dtos
         public int CategoryId { get; set; }
 
         // Image file
-        public Author? Author { get; set; }
-        public Category? Category { get; set; }
+     
   
     }
 }

@@ -72,7 +72,16 @@ namespace Book_Management_System
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret!))
                     };
                 });
-
+            //enabling FrontEnd
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowReact", policy =>
+                {
+                    policy.WithOrigins("http://localhost:3000")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
 
 
 
@@ -86,6 +95,7 @@ namespace Book_Management_System
                 app.UseSwaggerUI();
             }
             app.UseHttpsRedirection();
+            app.UseCors("AllowReact");
             app.UseAuthentication();
             app.UseAuthorization();
          
