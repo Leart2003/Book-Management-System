@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import API from "../services/api"
 import { useNavigate } from "react-router-dom"
+import { isAdmin } from "../services/Auth"
 
 function Books() {
   const [books, setBooks] = useState([])
@@ -9,6 +10,12 @@ function Books() {
   useEffect(() => {
     API.get("/Book").then((res) => setBooks(res.data))
   }, [])
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this book?")) return
+    await API.delete(`/Book/${id}`)
+    setBooks(books.filter((b) => b.id !== id))
+  }
 
   return (
     <div className="container-fluid bg-dark text-white p-4">
@@ -52,13 +59,42 @@ function Books() {
                   <small>Category: {book.category?.name}</small>
                 </p>
               </div>
-              <div className="card-footer d-flex gap-2">
+              <div
+                className="card-footer d-flex gap-2"
+                style={{ backgroundColor: "#1a1a1a", border: "none" }}
+              >
                 <button
                   className="btn btn-sm btn-primary w-100"
                   onClick={() => navigate(`/books/${book.id}`)}
                 >
                   View Details
                 </button>
+                {isAdmin() && (
+                  <>
+                    <button
+                      className="btn btn-sm w-100"
+                      style={{
+                        backgroundColor: "#2a2a2a",
+                        color: "#ffc107",
+                        border: "none",
+                      }}
+                      onClick={() => navigate(`/books/edit/${book.id}`)}
+                    >
+                      ✏️ Edit
+                    </button>
+                    <button
+                      className="btn btn-sm w-100"
+                      style={{
+                        backgroundColor: "#2a2a2a",
+                        color: "#ff4d4d",
+                        border: "none",
+                      }}
+                      onClick={() => handleDelete(book.id)}
+                    >
+                      🗑️ Delete
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>

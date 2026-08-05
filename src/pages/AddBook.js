@@ -1,376 +1,217 @@
-import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
 import API from "../services/api"
+import { useNavigate } from "react-router-dom"
+import { isAdmin } from "../services/Auth"
 
-function AddBook() {
+function Books() {
+  const [books, setBooks] = useState([])
+  const [search, setSearch] = useState("")
   const navigate = useNavigate()
-  const [authors, setAuthors] = useState([])
-  const [categories, setCategories] = useState([])
-  const [image, setImage] = useState(null)
-  const [error, setError] = useState("")
-  const [success, setSuccess] = useState("")
-
-  const [form, setForm] = useState({
-    title: "",
-    description: "",
-    price: "",
-    publishedYear: "",
-    authorId: "",
-    categoryId: "",
-  })
 
   useEffect(() => {
-    API.get("/Author").then((res) => setAuthors(res.data))
-    API.get("/Category").then((res) => setCategories(res.data))
+    API.get("/Book").then((res) => setBooks(res.data))
   }, [])
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this book?")) return
+    await API.delete(`/Book/${id}`)
+    setBooks(books.filter((b) => b.id !== id))
   }
 
-  const handleSubmit = async () => {
-    if (
-      !form.title ||
-      !form.authorId ||
-      !form.categoryId ||
-      !form.price ||
-      !form.publishedYear
-    ) {
-      setError("Please fill in all required fields.")
-      return
-    }
-
-    try {
-      const formData = new FormData()
-      formData.append("title", form.title)
-      formData.append("description", form.description)
-      formData.append("price", form.price)
-      formData.append("publishedYear", form.publishedYear)
-      formData.append("authorId", form.authorId)
-      formData.append("categoryId", form.categoryId)
-      if (image) formData.append("imageFile", image)
-
-      await API.post("/Book", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      })
-
-      setSuccess("Book added successfully!")
-      setTimeout(() => navigate("/books"), 1500)
-    } catch (err) {
-      setError("Something went wrong. Please try again.")
-    }
-  }
+  const filtered = books.filter((b) =>
+    b.title.toLowerCase().includes(search.toLowerCase()),
+  )
 
   return (
-    <div
-      style={{
-        backgroundColor: "#0f0f0f",
-        minHeight: "100vh",
-        color: "#fff",
-        padding: "40px 0",
-      }}
-    >
-      <div className="container" style={{ maxWidth: "600px" }}>
-        <h3 style={{ fontWeight: "700", marginBottom: "8px" }}>
-          ➕ Add New Book
-        </h3>
-        <p style={{ color: "#666", marginBottom: "32px" }}>
-          Fill in the details below to add a new book.
-        </p>
+    <div style={{ backgroundColor: "#f5f5f5", minHeight: "100vh" }}>
+      {/* Search Bar */}
+      <div
+        style={{
+          backgroundColor: "#fff",
+          padding: "20px 40px",
+          borderBottom: "1px solid #e0e0e0",
+        }}
+      >
+        <input
+          type="text"
+          placeholder="🔍 Search books..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          style={{
+            width: "100%",
+            maxWidth: "600px",
+            display: "block",
+            margin: "0 auto",
+            padding: "12px 20px",
+            borderRadius: "30px",
+            border: "1px solid #ddd",
+            fontSize: "14px",
+            outline: "none",
+            backgroundColor: "#f9f9f9",
+          }}
+        />
+      </div>
 
-        {error && (
-          <div
-            style={{
-              backgroundColor: "#2a1a1a",
-              border: "1px solid #ff4d4d",
-              borderRadius: "8px",
-              padding: "12px 16px",
-              marginBottom: "16px",
-              color: "#ff4d4d",
-              fontSize: "14px",
-            }}
-          >
-            {error}
-          </div>
-        )}
-        {success && (
-          <div
-            style={{
-              backgroundColor: "#1a2a1a",
-              border: "1px solid #4caf50",
-              borderRadius: "8px",
-              padding: "12px 16px",
-              marginBottom: "16px",
-              color: "#4caf50",
-              fontSize: "14px",
-            }}
-          >
-            {success}
-          </div>
-        )}
+      <div style={{ padding: "32px 40px" }}>
+        <div className="row g-4">
+          {filtered.map((book) => (
+            <div className="col-6 col-md-3" key={book.id}>
+              <div
+                style={{
+                  backgroundColor: "#fff",
+                  borderRadius: "10px",
+                  border: "1px solid #e8e8e8",
+                  overflow: "hidden",
+                  transition: "box-shadow 0.2s",
+                  cursor: "pointer",
+                  height: "100%",
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.boxShadow =
+                    "0 4px 20px rgba(0,0,0,0.1)")
+                }
+                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
+              >
+                {/* Image */}
+                <div style={{ position: "relative" }}>
+                  {book.imageUrl ? (
+                    <img
+                      src={`https://localhost:7012${book.imageUrl}`}
+                      alt={book.title}
+                      style={{
+                        width: "100%",
+                        height: "220px",
+                        objectFit: "cover",
+                      }}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "220px",
+                        backgroundColor: "#f0f0f0",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "48px",
+                      }}
+                    >
+                      📖
+                    </div>
+                  )}
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: "8px",
+                      right: "8px",
+                      backgroundColor: "#fff",
+                      borderRadius: "50%",
+                      width: "32px",
+                      height: "32px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "16px",
+                      boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+                      cursor: "pointer",
+                    }}
+                  >
+                    ♡
+                  </span>
+                </div>
 
-        {/* Title */}
-        <div style={{ marginBottom: "20px" }}>
-          <label
-            style={{
-              fontSize: "13px",
-              color: "#aaa",
-              marginBottom: "8px",
-              display: "block",
-            }}
-          >
-            TITLE *
-          </label>
-          <input
-            name="title"
-            value={form.title}
-            onChange={handleChange}
-            placeholder="Enter book title"
-            style={{
-              width: "100%",
-              backgroundColor: "#1a1a1a",
-              border: "1px solid #2a2a2a",
-              borderRadius: "8px",
-              padding: "12px 16px",
-              color: "#fff",
-              outline: "none",
-              fontSize: "14px",
-            }}
-          />
-        </div>
+                {/* Info */}
+                <div style={{ padding: "12px" }}>
+                  <p
+                    style={{
+                      fontSize: "13px",
+                      color: "#e63946",
+                      fontWeight: "600",
+                      margin: "0 0 4px",
+                    }}
+                  >
+                    {book.author?.name?.toUpperCase()}
+                  </p>
+                  <h6
+                    style={{
+                      fontSize: "14px",
+                      fontWeight: "700",
+                      margin: "0 0 8px",
+                      color: "#222",
+                    }}
+                  >
+                    {book.title}
+                  </h6>
+                  <p
+                    style={{
+                      fontSize: "15px",
+                      fontWeight: "800",
+                      color: "#222",
+                      margin: "0 0 10px",
+                    }}
+                  >
+                    {book.price} €
+                  </p>
 
-        {/* Description */}
-        <div style={{ marginBottom: "20px" }}>
-          <label
-            style={{
-              fontSize: "13px",
-              color: "#aaa",
-              marginBottom: "8px",
-              display: "block",
-            }}
-          >
-            DESCRIPTION
-          </label>
-          <textarea
-            name="description"
-            value={form.description}
-            onChange={handleChange}
-            placeholder="Enter book description"
-            rows={4}
-            style={{
-              width: "100%",
-              backgroundColor: "#1a1a1a",
-              border: "1px solid #2a2a2a",
-              borderRadius: "8px",
-              padding: "12px 16px",
-              color: "#fff",
-              outline: "none",
-              fontSize: "14px",
-              resize: "vertical",
-            }}
-          />
-        </div>
+                  <button
+                    onClick={() => navigate(`/books/${book.id}`)}
+                    style={{
+                      width: "100%",
+                      backgroundColor: "#e63946",
+                      border: "none",
+                      borderRadius: "6px",
+                      padding: "10px",
+                      color: "#fff",
+                      fontWeight: "600",
+                      fontSize: "13px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    View Details
+                  </button>
 
-        {/* Price and Year */}
-        <div className="d-flex gap-3" style={{ marginBottom: "20px" }}>
-          <div style={{ flex: 1 }}>
-            <label
-              style={{
-                fontSize: "13px",
-                color: "#aaa",
-                marginBottom: "8px",
-                display: "block",
-              }}
-            >
-              PRICE *
-            </label>
-            <input
-              name="price"
-              type="number"
-              value={form.price}
-              onChange={handleChange}
-              placeholder="0.00"
-              style={{
-                width: "100%",
-                backgroundColor: "#1a1a1a",
-                border: "1px solid #2a2a2a",
-                borderRadius: "8px",
-                padding: "12px 16px",
-                color: "#fff",
-                outline: "none",
-                fontSize: "14px",
-              }}
-            />
-          </div>
-          <div style={{ flex: 1 }}>
-            <label
-              style={{
-                fontSize: "13px",
-                color: "#aaa",
-                marginBottom: "8px",
-                display: "block",
-              }}
-            >
-              PUBLISHED YEAR *
-            </label>
-            <input
-              name="publishedYear"
-              type="number"
-              value={form.publishedYear}
-              onChange={handleChange}
-              placeholder="2024"
-              style={{
-                width: "100%",
-                backgroundColor: "#1a1a1a",
-                border: "1px solid #2a2a2a",
-                borderRadius: "8px",
-                padding: "12px 16px",
-                color: "#fff",
-                outline: "none",
-                fontSize: "14px",
-              }}
-            />
-          </div>
-        </div>
-
-        {/* Author */}
-        <div style={{ marginBottom: "20px" }}>
-          <label
-            style={{
-              fontSize: "13px",
-              color: "#aaa",
-              marginBottom: "8px",
-              display: "block",
-            }}
-          >
-            AUTHOR *
-          </label>
-          <select
-            name="authorId"
-            value={form.authorId}
-            onChange={handleChange}
-            style={{
-              width: "100%",
-              backgroundColor: "#1a1a1a",
-              border: "1px solid #2a2a2a",
-              borderRadius: "8px",
-              padding: "12px 16px",
-              color: "#fff",
-              outline: "none",
-              fontSize: "14px",
-            }}
-          >
-            <option value="">Select an author</option>
-            {authors.map((a) => (
-              <option key={a.id} value={a.id}>
-                {a.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Category */}
-        <div style={{ marginBottom: "20px" }}>
-          <label
-            style={{
-              fontSize: "13px",
-              color: "#aaa",
-              marginBottom: "8px",
-              display: "block",
-            }}
-          >
-            CATEGORY *
-          </label>
-          <select
-            name="categoryId"
-            value={form.categoryId}
-            onChange={handleChange}
-            style={{
-              width: "100%",
-              backgroundColor: "#1a1a1a",
-              border: "1px solid #2a2a2a",
-              borderRadius: "8px",
-              padding: "12px 16px",
-              color: "#fff",
-              outline: "none",
-              fontSize: "14px",
-            }}
-          >
-            <option value="">Select a category</option>
-            {categories.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Image */}
-        <div style={{ marginBottom: "32px" }}>
-          <label
-            style={{
-              fontSize: "13px",
-              color: "#aaa",
-              marginBottom: "8px",
-              display: "block",
-            }}
-          >
-            COVER IMAGE
-          </label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setImage(e.target.files[0])}
-            style={{
-              width: "100%",
-              backgroundColor: "#1a1a1a",
-              border: "1px solid #2a2a2a",
-              borderRadius: "8px",
-              padding: "12px 16px",
-              color: "#aaa",
-              fontSize: "14px",
-            }}
-          />
-        </div>
-
-        {/* Buttons */}
-        <div className="d-flex gap-3">
-          <button
-            onClick={handleSubmit}
-            style={{
-              flex: 1,
-              backgroundColor: "#6c63ff",
-              border: "none",
-              borderRadius: "8px",
-              padding: "14px",
-              color: "#fff",
-              fontWeight: "bold",
-              fontSize: "15px",
-              cursor: "pointer",
-            }}
-          >
-            Add Book
-          </button>
-          <button
-            onClick={() => navigate("/books")}
-            style={{
-              flex: 1,
-              backgroundColor: "#2a2a2a",
-              border: "none",
-              borderRadius: "8px",
-              padding: "14px",
-              color: "#fff",
-              fontWeight: "bold",
-              fontSize: "15px",
-              cursor: "pointer",
-            }}
-          >
-            Cancel
-          </button>
+                  {isAdmin() && (
+                    <div className="d-flex gap-2 mt-2">
+                      <button
+                        onClick={() => navigate(`/books/edit/${book.id}`)}
+                        style={{
+                          flex: 1,
+                          backgroundColor: "#fff",
+                          border: "1px solid #ddd",
+                          borderRadius: "6px",
+                          padding: "6px",
+                          color: "#444",
+                          fontSize: "12px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        ✏️ Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(book.id)}
+                        style={{
+                          flex: 1,
+                          backgroundColor: "#fff",
+                          border: "1px solid #ddd",
+                          borderRadius: "6px",
+                          padding: "6px",
+                          color: "#e63946",
+                          fontSize: "12px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        🗑️ Delete
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
   )
 }
 
-export default AddBook
+export default Books

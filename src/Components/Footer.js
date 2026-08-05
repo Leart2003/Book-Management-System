@@ -2,18 +2,18 @@ function Footer() {
   return (
     <footer
       style={{
-        backgroundColor: "#1a1a1a",
-        borderTop: "1px solid #2a2a2a",
-        padding: "20px 24px",
+        backgroundColor: "#fff",
+        borderTop: "1px solid #e0e0e0",
+        padding: "20px 40px",
         textAlign: "center",
-        color: "#555",
+        color: "#999",
         fontSize: "13px",
       }}
     >
       <p style={{ margin: 0 }}>
         © {new Date().getFullYear()}{" "}
-        <span style={{ color: "#6c63ff", fontWeight: "bold" }}>
-          Book Management
+        <span style={{ color: "#e63946", fontWeight: "700" }}>
+          Libraria Bookstore
         </span>{" "}
         — All rights reserved.
       </p>

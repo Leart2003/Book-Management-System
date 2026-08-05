@@ -42,7 +42,15 @@ function BookDetails() {
     await API.post(`/Favorite?bookId=${id}`)
     alert("Added to favorites!")
   }
-
+  const handleOrder = () => {
+    navigate("/payment", {
+      state: {
+        bookId: id,
+        bookTitle: book.title,
+        bookPrice: book.price,
+      },
+    })
+  }
   if (!book)
     return (
       <div
@@ -78,6 +86,20 @@ function BookDetails() {
           }}
         >
           ❤️ Add to Favorites
+        </button>
+        <button
+          onClick={handleOrder}
+          style={{
+            backgroundColor: "#2a2a2a",
+            border: "none",
+            borderRadius: "8px",
+            padding: "10px 20px",
+            color: "#fff",
+            fontWeight: "bold",
+            cursor: "pointer",
+          }}
+        >
+          🛒 Order
         </button>
         <button
           className="btn btn-sm"
