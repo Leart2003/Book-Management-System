@@ -1,10 +1,8 @@
 ﻿using Application.Services;
 using Domain.Dtos;
 using Domain.Entities;
-using Domain.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Application.Services;
 
 namespace Book_Management_System.Controllers
 {
