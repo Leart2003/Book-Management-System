@@ -8,7 +8,9 @@ using System.Text;
 
 
 
-
+/// <summary>
+/// inherit from ASP.NET Core Identity support.
+/// </summary>
 public class ApplicationDbContext : IdentityDbContext<User>
 {
     
@@ -17,6 +19,10 @@ public class ApplicationDbContext : IdentityDbContext<User>
 
     }
 
+
+    /// <summary>
+    /// 
+    /// </summary>
     public DbSet<Book> Books => Set<Book>();
     public DbSet<Author> Authors => Set<Author>();
     public DbSet<Category> Categories => Set<Category>();

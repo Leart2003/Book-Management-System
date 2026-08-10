@@ -14,6 +14,9 @@ namespace Book_Management_System.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+        /// <summary>
+        /// Inject UserManager from ASP.NET Core identity(Depency injection)
+        /// </summary>
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
         public AuthController(IConfiguration configuration, UserManager<User> userManager)
@@ -22,6 +25,15 @@ namespace Book_Management_System.Controllers
             _userManager = userManager;
         }
 
+
+        /// <summary>
+        /// Register a user(Post) into the databsse
+        /// </summary>
+        /// <param name="registerDto"></param>
+        /// <returns>
+        /// return a response if the user is register code 200(Ok), if not response code="400"</returns>
+        /// /// <response code="200">The user was successfully registered.</response>
+        /// <response code="400">The registration data is invalid or the user could not be created.</response>
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto registerDto)
         {
@@ -41,6 +53,16 @@ namespace Book_Management_System.Controllers
             }
             return Ok("User register succesfully");
         }
+        /// <summary>
+        /// Login into the app by using their email adress and a password
+        /// Generate JWT token if the credentials are valid
+        /// </summary>
+        /// <param name="loginDto">
+        /// loginDto contains the users email and password</param>
+        /// Checks if user is null the system will return an answer user not found
+        /// Check if the user insterted the right password, if the password is wrong the system will return an answer(Wrong password)
+        /// <returns>If validPass the system will generate a JWt token and the user will login into the appliction</returns>
+
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
