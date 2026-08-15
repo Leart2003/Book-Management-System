@@ -15,6 +15,18 @@ namespace Book_Management_System.Controllers
         {
             _ratingService = ratingService;
         }
+
+        /// <summary>
+        /// Adds or updates a rating for a specific book.
+        /// </summary>
+        /// <param name="bookId">The ID of the book to rate.</param>
+        /// <param name="stars">The number of stars given to the book.</param>
+        /// <returns>
+        /// Returns a success message if the rating was added,
+        /// unauthorized if the user is not authenticated,
+        /// or bad request if the rating is invalid.
+        /// </returns>
+        
         [HttpPost("{bookId}")]
         public async Task<IActionResult> RateBook(int bookId, [FromBody] int stars)
         {
@@ -36,6 +48,14 @@ namespace Book_Management_System.Controllers
             
         }
 
+        /// <summary>
+        /// Retrieves the average rating of a specific book.
+        /// </summary>
+        /// <param name="bookId">The ID of the book.</param>
+        /// <returns>
+        /// Returns the book ID and its average rating.
+        /// </returns>
+        /// <response code="200">The average rating was successfully retrieved.</response>
 
         [HttpGet("{bookId}")]
       
