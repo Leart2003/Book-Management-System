@@ -16,6 +16,11 @@ namespace Book_Management_System.Controllers
         {
             _categoryRepository = categoryRepository;
         }
+
+        /// <summary>
+        /// Get all Categories
+        /// </summary>
+        /// <returns>Return all Categories</returns>
         [HttpGet]
 
         public async Task<IActionResult> GetAll()
@@ -25,6 +30,11 @@ namespace Book_Management_System.Controllers
             return Ok(categories);
 
         }
+        /// <summary>
+        /// Get a category by Id
+        /// </summary>
+        /// <param name="id">The ID of the category to retrieve</param>
+        /// <returns>Return category if found</returns>
         [HttpGet("{id}")]
         public async Task<IActionResult>GetById(int id)
         {
@@ -36,6 +46,13 @@ namespace Book_Management_System.Controllers
             return Ok(categories);
 
         }
+
+        /// <summary>
+        /// Creates a new category
+        /// </summary>
+        /// <param name="category">The category to be created</param>
+        /// <returns>Returns the new created Category</returns>
+        /// <response code="201">The category was successfully created.</response>
         [HttpPost]
         public async Task<IActionResult> Create(Category category)
         {
@@ -43,6 +60,16 @@ namespace Book_Management_System.Controllers
 
             return CreatedAtAction(nameof(GetById), new { id = category.Id }, category);
         }
+
+        /// <summary>
+        /// Updates an existing Category
+        /// </summary>
+        /// <param name="id">Update the category by the given Id</param>
+        /// <param name="category">The category to be updated</param>
+        /// <returns>
+        /// Returns the newly created category with a <see cref="CreatedAtActionResult"/> response.
+        /// </returns>
+        /// <response code="201">The category was successfully created.</response>
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id,Category category)
 
@@ -55,6 +82,13 @@ namespace Book_Management_System.Controllers
 
             return NoContent();
         }
+        /// <summary>
+        /// Deletes an existing Category
+        /// </summary>
+        /// <param name="id">The id of the category to be deleted</param>
+        /// Returns <see cref="NoContentResult"/> if the category was successfully deleted.
+        /// </returns>
+        /// <response code="204">The category was successfully deleted.</response>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
