@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="Application.Tests/Application.Tests.csproj" />
   <Project Path="Application/Application.csproj" Id="d7a1b186-ecb7-433d-9e80-e6d76b7c1bde" />
   <Project Path="Book Management System/Book Management System-API.csproj" />
   <Project Path="Domain/Domain.csproj" Id="29abb7ce-71d6-4fbc-99ee-d21cbdf3b1f1" />
