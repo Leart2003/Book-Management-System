@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Application.Services;
+using Domain.Entities;
+using Moq;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,9 +12,8 @@ namespace Application.Tests.ApiTest
     public class BookControllerTest
     {
         [Fact]
-        public void Test1()
+        public async Task GetAllBooksTest()
         {
-
         }
     }
 }
