@@ -16,10 +16,10 @@ namespace Infrastructure.Repository
             _context = context;
         }
 
-        public async Task<IEnumerable<Book>> GetBooksAsync()
-        {
-           return await _context.Books.ToListAsync();
-        }
+            public async Task<IEnumerable<Book>> GetBooksAsync()
+            {
+               return await _context.Books.ToListAsync();
+            }
 
         public async Task<Book?> GetByIdAsync(int id) =>
             await _context.Books.FindAsync(id);
