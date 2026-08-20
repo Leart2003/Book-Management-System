@@ -16,8 +16,7 @@ namespace Application.Tests.ApiTest
     {
         [Fact]
         public async Task GetAllBooksAsync_ReturnsAllBooks()
-        {
-            // Arrange
+        { 
             var mockRepo = new Mock<IBookRepository>();
             mockRepo.Setup(r => r.GetBooksAsync()).ReturnsAsync(new List<Book>
             {
@@ -27,10 +26,9 @@ namespace Application.Tests.ApiTest
 
             var service = new BookService(mockRepo.Object);
 
-            // Act
             var result = await service.GetAllBooksAsync();
 
-            // Assert
+           
 
         }
     }
