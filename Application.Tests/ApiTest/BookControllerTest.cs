@@ -31,5 +31,16 @@ namespace Application.Tests.ApiTest
            
 
         }
+        [Fact]
+        public async Task DeleteBookAsync()
+        {
+            var mockRepo = new Mock<IBookRepository>();
+            var service = new BookService(mockRepo.Object);
+
+
+            await service.DeleteBookAsync(1);
+            mockRepo.Verify(r => r.DeleteAsync(1), Times.Once);
+
+        }
     }
 }
