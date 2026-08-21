@@ -28,7 +28,6 @@ function Layout() {
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/payment" element={<Payment />} />
-
         <Route path="/books/add" element={<AddBook />} />
         <Route path="/books/edit/:id" element={<EditBook />} />
         <Route path="/books/:id" element={<BookDetails />} />
