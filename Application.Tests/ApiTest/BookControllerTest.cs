@@ -56,5 +56,20 @@ namespace Application.Tests.ApiTest
             Assert.NotNull(result);
             Assert.Equal("Clean Code", result.Title);
         }
+
+        [Fact]
+        public async Task UpdateBookAsync_CallsRepositoryUpdateAsync()
+        {
+            // Arrange
+            var mockRepo = new Mock<IBookRepository>();
+            var book = new Book { Id = 1, Title = "Updated Title" };
+            var service = new BookService(mockRepo.Object);
+
+            // Act
+            await service.UpdateBookAsync(book);
+
+            // Assert
+            mockRepo.Verify(r => r.UpdateAsync(book), Times.Once);
+        }
     }
 }
