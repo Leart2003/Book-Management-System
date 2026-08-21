@@ -42,5 +42,19 @@ namespace Application.Tests.ApiTest
             mockRepo.Verify(r => r.DeleteAsync(1), Times.Once);
 
         }
+
+        [Fact]
+
+        public async Task GetBookById()
+        {
+            var mockRepo = new Mock<IBookRepository>();
+            mockRepo.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(new Book { Id = 1, Title = "Clean Code" });
+
+            var service = new BookService(mockRepo.Object);
+            var result = await service.GetBookByIdAsync(1);
+
+            Assert.NotNull(result);
+            Assert.Equal("Clean Code", result.Title);
+        }
     }
 }
