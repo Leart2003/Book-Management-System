@@ -30,17 +30,32 @@ namespace Application.Tests.ApiTest
         [Fact]
         public async Task GetAuthorById()
         {
-            // Arrange
+         
             var mockRepo = new Mock<IAuthorRepository>();
             mockRepo.Setup(r => r.GetByIdAsync(999)).ReturnsAsync((Author?)null);
 
             var controller = new AuthorController(mockRepo.Object);
 
-            // Act
+          
             var result = await controller.GetBydId(999);
 
-            // Assert
+         
             Assert.IsType<NotFoundResult>(result);
+        }
+        [Fact]
+
+        public async Task Delete_ReturnsNoContent()
+        {
+            
+            var mockRepo = new Mock<IAuthorRepository>();
+            var controller = new AuthorController(mockRepo.Object);
+
+         
+            var result = await controller.Delete(1);
+
+            
+            Assert.IsType<NoContentResult>(result);
+            mockRepo.Verify(r => r.DeleteAsync(1), Times.Once);
         }
     }
 
