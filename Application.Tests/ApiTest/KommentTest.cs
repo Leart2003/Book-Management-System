@@ -1,0 +1,37 @@
+﻿using Application.Services;
+using Domain.Entities;
+using Domain.Interfaces;
+using Moq;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Application.Tests.ApiTest
+{
+    public class KommentTest
+    {
+        [Fact]
+        public async Task GetBookCommentsAll()
+        {
+            var mockRepo = new Mock<IKommentRepository>();
+            mockRepo.Setup(r => r.GetCommentsAsync(1)).ReturnsAsync(new List<Komment>
+            {
+                new Komment { Id = 1, BookId = 1, Content = "Great book!" },
+                new Komment { Id = 2, BookId = 1, Content = "Loved it." }
+            });
+
+            var service = new KommentService(mockRepo.Object);
+
+            var result = await service.GetBookCommentsAsync(1);
+
+            Assert.Equal(2, result.Count());
+        }
+
+    
+
+     
+    }
+}
+
+    
+
