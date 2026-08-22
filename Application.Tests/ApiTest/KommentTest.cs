@@ -26,10 +26,22 @@ namespace Application.Tests.ApiTest
 
             Assert.Equal(2, result.Count());
         }
+        [Fact]
+        public async Task AddComment()
+        {
+            
+            var mockRepo = new Mock<IKommentRepository>();
+            var service = new KommentService(mockRepo.Object);
 
-    
+           
+            await service.AddCommentAsync("user1", 1, "Nice read");
 
-     
+            mockRepo.Verify(r => r.AddCommentAsync(It.IsAny<Komment>()), Times.Once);
+        }
+
+
+
+
     }
 }
 
