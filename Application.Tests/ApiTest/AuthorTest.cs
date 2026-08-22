@@ -11,7 +11,7 @@ namespace Application.Tests.ApiTest
 {
     public class AuthorTest
     {
-
+        [Fact]
         public async Task GetAllAuthorTest()
         {
             var mockRepo = new Mock<IAuthorRepository>();
@@ -26,6 +26,21 @@ namespace Application.Tests.ApiTest
             var okResult = Assert.IsType<OkObjectResult>(result);
             var authors = Assert.IsAssignableFrom<IEnumerable<Author>>(okResult.Value);
             Assert.Equal(2, authors.Count());
+        }
+        [Fact]
+        public async Task GetAuthorById()
+        {
+            // Arrange
+            var mockRepo = new Mock<IAuthorRepository>();
+            mockRepo.Setup(r => r.GetByIdAsync(999)).ReturnsAsync((Author?)null);
+
+            var controller = new AuthorController(mockRepo.Object);
+
+            // Act
+            var result = await controller.GetBydId(999);
+
+            // Assert
+            Assert.IsType<NotFoundResult>(result);
         }
     }
 
