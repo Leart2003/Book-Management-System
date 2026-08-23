@@ -38,7 +38,18 @@ namespace Application.Tests.ApiTest
 
             mockRepo.Verify(r => r.AddCommentAsync(It.IsAny<Komment>()), Times.Once);
         }
+       
+        public async Task DeleteCommentAsync_CallsRepositoryDeleteCommentAsync()
+        {
+           
+            var mockRepo = new Mock<IKommentRepository>();
+            var service = new KommentService(mockRepo.Object);
 
+            await service.DeleteCommentAsync(1);
+
+            
+            mockRepo.Verify(r => r.DeleteCommentAsync(1), Times.Once);
+        }
 
 
 
