@@ -36,5 +36,19 @@ namespace Application.Tests
                 service.RateBookAsync(1, "user1", 0));
         }
 
+        [Fact]
+        public async Task GetAverageRatingAsync()
+        {
+        
+            var mockRepo = new Mock<IRatingInterface>();
+            mockRepo.Setup(r => r.GetAverageRating(1)).ReturnsAsync(4.5);
+
+            var service = new RatingService(mockRepo.Object);
+
+            var result = await service.GetAverageRatingAsync(1);
+
+            Assert.Equal(4.5, result);
+        }
+
     }
 }
