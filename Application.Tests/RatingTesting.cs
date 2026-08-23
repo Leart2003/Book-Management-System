@@ -49,6 +49,17 @@ namespace Application.Tests
 
             Assert.Equal(4.5, result);
         }
+        [Fact]
+        public async Task RateBookAsync_ThrowsArgumentException_WhenStarsTooHigh()
+        {
+            // Arrange
+            var mockRepo = new Mock<IRatingInterface>();
+            var service = new RatingService(mockRepo.Object);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                service.RateBookAsync(1, "user1", 6));
+        }
 
     }
 }
