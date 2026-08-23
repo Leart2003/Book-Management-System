@@ -25,5 +25,16 @@ namespace Application.Tests
             mockRepo.Verify(r => r.AddRatingAsync(It.IsAny<Rating>()), Times.Once);
         }
 
+        [Fact]
+        public async Task RateBookAsync_ThrowsArgumentException_WhenStarsTooLow()
+        {
+           
+            var mockRepo = new Mock<IRatingInterface>();
+            var service = new RatingService(mockRepo.Object);
+
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                service.RateBookAsync(1, "user1", 0));
+        }
+
     }
 }
