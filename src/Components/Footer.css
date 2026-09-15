@@ -1,0 +1,35 @@
+.site-footer {
+  background: #283b3b;
+  color: #e8efeb;
+  padding: 28px;
+}
+
+.site-footer p {
+  align-items: center;
+  display: flex;
+  gap: 22px;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 1240px;
+}
+
+.site-footer strong {
+  color: #f1b5a7;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.05rem;
+}
+
+.site-footer span,
+.site-footer small {
+  color: #b9c9c4;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 620px) {
+  .site-footer p {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+}
