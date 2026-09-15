@@ -1,106 +1,124 @@
 import { useEffect, useState } from "react"
-import API from "../services/api"
 import { useNavigate } from "react-router-dom"
+import API from "../services/api"
 import { isAdmin } from "../services/Auth"
+import "./Books.css"
 
 function Books() {
   const [books, setBooks] = useState([])
+  const [search, setSearch] = useState("")
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("")
   const navigate = useNavigate()
 
   useEffect(() => {
-    API.get("/Book").then((res) => setBooks(res.data))
+    const loadBooks = async () => {
+      try {
+        const response = await API.get("/Book")
+        setBooks(response.data)
+      } catch (requestError) {
+        setError("We could not load the catalog. Please try again.")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadBooks()
   }, [])
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this book?")) return
-    await API.delete(`/Book/${id}`)
-    setBooks(books.filter((b) => b.id !== id))
+    try {
+      await API.delete(`/Book/${id}`)
+      setBooks((currentBooks) => currentBooks.filter((book) => book.id !== id))
+    } catch (requestError) {
+      setError("The book could not be deleted. Please try again.")
+    }
   }
 
+  const visibleBooks = books.filter((book) => {
+    const searchText = search.toLowerCase().trim()
+    return [book.title, book.author?.name, book.category?.name]
+      .filter(Boolean)
+      .some((value) => value.toLowerCase().includes(searchText))
+  })
+
   return (
-    <div className="container-fluid bg-dark text-white p-4">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h4>All Books</h4>
+    <main className="catalog-page">
+      <section className="catalog-heading">
+        <div>
+          <p className="eyebrow">The collection</p>
+          <h1>Find your next great read</h1>
+          <p className="catalog-intro">Browse thoughtful stories, trusted references, and new favourites.</p>
+        </div>
         <button
           onClick={() => navigate("/books/add")}
-          style={{
-            backgroundColor: "#6c63ff",
-            border: "none",
-            borderRadius: "8px",
-            padding: "8px 16px",
-            color: "#fff",
-            fontWeight: "bold",
-            cursor: "pointer",
-          }}
+          className="add-book-button"
         >
-          ➕ Add Book
+          Add book
         </button>
-      </div>
+      </section>
 
-      <div className="row">
-        {books.map((book) => (
-          <div className="col-md-4 mb-4" key={book.id}>
-            <div className="card bg-secondary text-white h-100">
+      <label className="catalog-search">
+        <span>Search the catalog</span>
+        <input
+          type="search"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder="Title, author, or category"
+        />
+      </label>
+
+      {error && <p className="catalog-message error-message">{error}</p>}
+      {loading && <p className="catalog-message">Loading the catalog...</p>}
+      {!loading && !error && visibleBooks.length === 0 && (
+        <p className="catalog-message">No books match that search.</p>
+      )}
+
+      <div className="book-grid">
+        {visibleBooks.map((book) => (
+          <article className="book-card" key={book.id}>
               {book.imageUrl && (
                 <img
                   src={`https://localhost:7012${book.imageUrl}`}
-                  className="card-img-top"
+                  className="book-cover"
                   alt={book.title}
-                  style={{ height: "200px", objectFit: "cover" }}
                 />
               )}
-              <div className="card-body">
-                <h5 className="card-title">{book.title}</h5>
-                <p className="card-text text-light">{book.description}</p>
-                <p className="card-text">
-                  <small>Author: {book.author?.name}</small>
-                </p>
-                <p className="card-text">
-                  <small>Category: {book.category?.name}</small>
-                </p>
+              <div className="book-card-body">
+                <p className="book-category">{book.category?.name || "Featured title"}</p>
+                <h2>{book.title}</h2>
+                <p className="book-author">{book.author?.name || "Unknown author"}</p>
+                <p className="book-description">{book.description}</p>
               </div>
-              <div
-                className="card-footer d-flex gap-2"
-                style={{ backgroundColor: "#1a1a1a", border: "none" }}
-              >
+              <div className="book-card-actions">
                 <button
-                  className="btn btn-sm btn-primary w-100"
+                  className="view-button"
                   onClick={() => navigate(`/books/${book.id}`)}
                 >
-                  View Details
+                  View details
                 </button>
                 {isAdmin() && (
                   <>
                     <button
-                      className="btn btn-sm w-100"
-                      style={{
-                        backgroundColor: "#2a2a2a",
-                        color: "#ffc107",
-                        border: "none",
-                      }}
+                      className="text-button"
                       onClick={() => navigate(`/books/edit/${book.id}`)}
                     >
-                      ✏️ Edit
+                      Edit
                     </button>
                     <button
-                      className="btn btn-sm w-100"
-                      style={{
-                        backgroundColor: "#2a2a2a",
-                        color: "#ff4d4d",
-                        border: "none",
-                      }}
+                      className="text-button danger-button"
                       onClick={() => handleDelete(book.id)}
                     >
-                      🗑️ Delete
+                      Delete
                     </button>
                   </>
                 )}
               </div>
-            </div>
-          </div>
+          </article>
         ))}
       </div>
-    </div>
+    </main>
   )
 }
 
