@@ -1,68 +1,101 @@
 .login-container {
+  align-items: center;
+  background: linear-gradient(135deg, #efe8df 0%, #f8f6f2 52%, #d7e2df 100%);
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #0f0f0f;
+  min-height: 100vh;
+  padding: 28px;
 }
 
 .login-card {
-  background-color: #1a1a1a;
-  padding: 40px;
-  border-radius: 12px;
-  width: 360px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: 0 24px 60px rgba(31, 41, 51, 0.13);
   display: flex;
   flex-direction: column;
   gap: 16px;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  padding: 46px;
+  width: min(100%, 420px);
+}
+
+.login-kicker {
+  color: var(--accent);
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .login-title {
-  color: #ffffff;
+  color: var(--ink);
+  font-size: 2.5rem;
+  font-weight: 400;
   margin: 0;
-  font-size: 24px;
   text-align: center;
 }
 
 .login-subtitle {
-  color: #888;
+  color: var(--muted);
+  font-family: "Segoe UI", sans-serif;
   margin: 0;
   text-align: center;
-  font-size: 14px;
 }
 
 .login-input {
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #333;
-  background-color: #252525;
-  color: #fff;
-  font-size: 14px;
-  outline: none;
+  background: #fbfaf8;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  color: var(--ink);
+  padding: 13px 14px;
 }
 
 .login-input:focus {
-  border-color: #6c63ff;
+  border-color: var(--accent);
 }
 
 .login-button {
-  padding: 12px;
-  border-radius: 8px;
-  border: none;
-  background-color: #6c63ff;
+  background: var(--accent);
+  border: 0;
+  border-radius: 3px;
   color: #fff;
-  font-size: 16px;
   cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.2s;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 13px;
 }
 
 .login-button:hover {
-  background-color: #574fd6;
+  background: var(--accent-dark);
+}
+
+.login-button:disabled {
+  cursor: wait;
+  opacity: 0.7;
 }
 
 .login-error {
-  color: #ff4d4d;
-  font-size: 13px;
+  color: var(--accent-dark);
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.85rem;
   text-align: center;
+}
+
+.login-register {
+  color: var(--muted);
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.85rem;
+  margin: 4px 0 0;
+  text-align: center;
+}
+
+.login-register button {
+  background: none;
+  border: 0;
+  color: var(--accent);
+  cursor: pointer;
+  font-weight: 700;
+  padding: 0;
 }
