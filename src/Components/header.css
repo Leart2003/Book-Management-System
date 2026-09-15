@@ -1,0 +1,100 @@
+.site-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.site-nav {
+  align-items: center;
+  display: flex;
+  gap: 36px;
+  justify-content: space-between;
+  margin: 0 auto;
+  max-width: 1240px;
+  min-height: 76px;
+  padding: 12px 28px;
+}
+
+.brand,
+.nav-links button,
+.favorite-link,
+.logout-button {
+  background: transparent;
+  border: 0;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.brand {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.brand span {
+  color: var(--accent);
+}
+
+.nav-links,
+.account-actions {
+  align-items: center;
+  display: flex;
+  gap: 22px;
+}
+
+.nav-links {
+  flex: 1;
+  justify-content: center;
+}
+
+.nav-links button {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.nav-links button:hover,
+.favorite-link:hover {
+  color: var(--accent);
+}
+
+.nav-links .add-link {
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  color: var(--accent);
+  padding: 8px 16px;
+}
+
+.favorite-link {
+  font-size: 1.55rem;
+  line-height: 1;
+}
+
+.logout-button {
+  background: var(--accent);
+  border-radius: 4px;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 10px 16px;
+}
+
+.logout-button:hover {
+  background: var(--accent-dark);
+}
+
+@media (max-width: 720px) {
+  .site-nav {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .nav-links {
+    order: 3;
+    overflow-x: auto;
+    justify-content: flex-start;
+    width: 100%;
+  }
+}

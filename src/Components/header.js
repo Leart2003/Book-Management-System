@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import { isAdmin } from "../services/Auth"
+import "./header.css"
 
 function Header() {
   const navigate = useNavigate()
@@ -10,103 +11,35 @@ function Header() {
   }
 
   return (
-    <nav
-      style={{
-        backgroundColor: "#fff",
-        borderBottom: "1px solid #e0e0e0",
-        padding: "0 40px",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        height: "64px",
-        position: "sticky",
-        top: 0,
-        zIndex: 100,
-        boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
-      }}
-    >
-      {/* Logo */}
-      <div onClick={() => navigate("/books")} style={{ cursor: "pointer" }}>
-        <span style={{ fontWeight: "800", fontSize: "20px", color: "#222" }}>
-          LIBRARIA <span style={{ color: "#e63946" }}>BOOKSTORE</span>
-        </span>
-      </div>
-
-      {/* Nav Links */}
-      <div style={{ display: "flex", alignItems: "center", gap: "32px" }}>
-        <span
-          onClick={() => navigate("/books")}
-          style={{
-            cursor: "pointer",
-            fontSize: "14px",
-            color: "#444",
-            fontWeight: "500",
-          }}
-        >
-          Books
-        </span>
-        <span
-          onClick={() => navigate("/favorites")}
-          style={{
-            cursor: "pointer",
-            fontSize: "14px",
-            color: "#444",
-            fontWeight: "500",
-          }}
-        >
-          Favorites
-        </span>
-        <span
-          onClick={() => navigate("/orders")}
-          style={{
-            cursor: "pointer",
-            fontSize: "14px",
-            color: "#444",
-            fontWeight: "500",
-          }}
-        >
-          Orders
-        </span>
-        {isAdmin() && (
-          <span
-            onClick={() => navigate("/books/add")}
-            style={{
-              cursor: "pointer",
-              fontSize: "14px",
-              color: "#e63946",
-              fontWeight: "600",
-            }}
-          >
-            + Add Book
-          </span>
-        )}
-      </div>
-
-      {/* Account */}
-      <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-        <span
-          onClick={() => navigate("/favorites")}
-          style={{ cursor: "pointer", fontSize: "20px" }}
-        >
-          ♡
-        </span>
-        <button
-          onClick={handleLogout}
-          style={{
-            backgroundColor: "#e63946",
-            border: "none",
-            borderRadius: "6px",
-            padding: "8px 18px",
-            color: "#fff",
-            fontWeight: "600",
-            fontSize: "13px",
-            cursor: "pointer",
-          }}
-        >
-          Logout
+    <header className="site-header">
+      <nav className="site-nav" aria-label="Main navigation">
+        <button className="brand" onClick={() => navigate("/books")}>
+          Libraria <span>Bookstore</span>
         </button>
-      </div>
-    </nav>
+        <div className="nav-links">
+          <button onClick={() => navigate("/books")}>Books</button>
+          <button onClick={() => navigate("/favorites")}>Favorites</button>
+          <button onClick={() => navigate("/orders")}>Orders</button>
+          {isAdmin() && (
+            <button className="add-link" onClick={() => navigate("/books/add")}>
+              Add book
+            </button>
+          )}
+        </div>
+        <div className="account-actions">
+          <button
+            className="favorite-link"
+            aria-label="Open favorites"
+            onClick={() => navigate("/favorites")}
+          >
+            &#9825;
+          </button>
+          <button className="logout-button" onClick={handleLogout}>
+            Log out
+          </button>
+        </div>
+      </nav>
+    </header>
   )
 }
 
