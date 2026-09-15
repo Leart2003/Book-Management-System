@@ -11,6 +11,11 @@ import Favorites from "./pages/Favorites"
 import Orders from "./pages/Orders"
 import Payment from "./pages/Payment"
 import EditBook from "./pages/Edit"
+import { hasValidToken } from "./services/Auth"
+
+function ProtectedRoute({ children }) {
+  return hasValidToken() ? children : <Navigate to="/login" replace />
+}
 
 function Layout() {
   const location = useLocation()
@@ -24,13 +29,13 @@ function Layout() {
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/books" element={<Books />} />
-        <Route path="/favorites" element={<Favorites />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/payment" element={<Payment />} />
-        <Route path="/books/add" element={<AddBook />} />
-        <Route path="/books/edit/:id" element={<EditBook />} />
-        <Route path="/books/:id" element={<BookDetails />} />
+        <Route path="/books" element={<ProtectedRoute><Books /></ProtectedRoute>} />
+        <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
+        <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+        <Route path="/payment" element={<ProtectedRoute><Payment /></ProtectedRoute>} />
+        <Route path="/books/add" element={<ProtectedRoute><AddBook /></ProtectedRoute>} />
+        <Route path="/books/edit/:id" element={<ProtectedRoute><EditBook /></ProtectedRoute>} />
+        <Route path="/books/:id" element={<ProtectedRoute><BookDetails /></ProtectedRoute>} />
       </Routes>
       {!hideHeader && <Footer />}
     </>
