@@ -1,20 +1,25 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
-import Login from "./pages/Login"
-import Books from "./pages/Books"
-import BookDetails from "./pages/BookDetails"
-import Header from "./Components/header"
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom"
 import Footer from "./Components/Footer"
-import { useLocation } from "react-router-dom"
+import Header from "./Components/header"
 import AddBook from "./pages/AddBook"
-import Register from "./pages/Register"
+import BookDetails from "./pages/BookDetails"
+import Books from "./pages/Books"
+import EditBook from "./pages/Edit"
 import Favorites from "./pages/Favorites"
+import Login from "./pages/Login"
 import Orders from "./pages/Orders"
 import Payment from "./pages/Payment"
-import EditBook from "./pages/Edit"
-import { hasValidToken } from "./services/Auth"
+import Register from "./pages/Register"
+import { hasValidToken, isAdmin } from "./services/Auth"
 
 function ProtectedRoute({ children }) {
   return hasValidToken() ? children : <Navigate to="/login" replace />
+}
+
+function AdminRoute({ children }) {
+  if (!hasValidToken()) return <Navigate to="/login" replace />
+
+  return isAdmin() ? children : <Navigate to="/books" replace />
 }
 
 function Layout() {
@@ -33,9 +38,10 @@ function Layout() {
         <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
         <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
         <Route path="/payment" element={<ProtectedRoute><Payment /></ProtectedRoute>} />
-        <Route path="/books/add" element={<ProtectedRoute><AddBook /></ProtectedRoute>} />
-        <Route path="/books/edit/:id" element={<ProtectedRoute><EditBook /></ProtectedRoute>} />
+        <Route path="/books/add" element={<AdminRoute><AddBook /></AdminRoute>} />
+        <Route path="/books/edit/:id" element={<AdminRoute><EditBook /></AdminRoute>} />
         <Route path="/books/:id" element={<ProtectedRoute><BookDetails /></ProtectedRoute>} />
+        <Route path="*" element={<Navigate to="/books" replace />} />
       </Routes>
       {!hideHeader && <Footer />}
     </>
