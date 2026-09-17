@@ -10,6 +10,7 @@ function Books() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const navigate = useNavigate()
+  const userIsAdmin = isAdmin()
 
   useEffect(() => {
     const loadBooks = async () => {
@@ -51,23 +52,32 @@ function Books() {
           <h1>Find your next great read</h1>
           <p className="catalog-intro">Browse thoughtful stories, trusted references, and new favourites.</p>
         </div>
-        <button
-          onClick={() => navigate("/books/add")}
-          className="add-book-button"
-        >
-          Add book
-        </button>
+        {userIsAdmin && (
+          <button
+            onClick={() => navigate("/books/add")}
+            className="add-book-button"
+          >
+            Add book
+          </button>
+        )}
       </section>
 
-      <label className="catalog-search">
-        <span>Search the catalog</span>
-        <input
-          type="search"
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder="Title, author, or category"
-        />
-      </label>
+      <div className="catalog-tools">
+        <label className="catalog-search">
+          <span>Search the catalog</span>
+          <input
+            type="search"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Title, author, or category"
+          />
+        </label>
+        {!loading && !error && (
+          <p className="catalog-count">
+            Showing {visibleBooks.length} of {books.length} books
+          </p>
+        )}
+      </div>
 
       {error && <p className="catalog-message error-message">{error}</p>}
       {loading && <p className="catalog-message">Loading the catalog...</p>}
@@ -78,18 +88,23 @@ function Books() {
       <div className="book-grid">
         {visibleBooks.map((book) => (
           <article className="book-card" key={book.id}>
-              {book.imageUrl && (
+              {book.imageUrl ? (
                 <img
                   src={`https://localhost:7012${book.imageUrl}`}
                   className="book-cover"
                   alt={book.title}
                 />
+              ) : (
+                <div className="book-cover book-cover-placeholder">
+                  {book.title?.charAt(0) || "B"}
+                </div>
               )}
               <div className="book-card-body">
                 <p className="book-category">{book.category?.name || "Featured title"}</p>
                 <h2>{book.title}</h2>
                 <p className="book-author">{book.author?.name || "Unknown author"}</p>
                 <p className="book-description">{book.description}</p>
+                {book.price && <p className="book-price">${Number(book.price).toFixed(2)}</p>}
               </div>
               <div className="book-card-actions">
                 <button
@@ -98,7 +113,7 @@ function Books() {
                 >
                   View details
                 </button>
-                {isAdmin() && (
+                {userIsAdmin && (
                   <>
                     <button
                       className="text-button"
