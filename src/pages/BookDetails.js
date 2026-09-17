@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
-import { useParams, useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import API from "../services/api"
+import "./BookDetails.css"
 
 function BookDetails() {
   const { id } = useParams()
@@ -11,37 +12,82 @@ function BookDetails() {
   const [rating, setRating] = useState(0)
   const [averageRating, setAverageRating] = useState(0)
   const [hovered, setHovered] = useState(0)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("")
+  const [actionMessage, setActionMessage] = useState("")
 
   useEffect(() => {
-    API.get(`/Book/${id}`).then((res) => setBook(res.data))
-    API.get(`/Comment/${id}`).then((res) => setComments(res.data))
-    API.get(`/Rating/${id}`).then((res) =>
-      setAverageRating(res.data.averageRating),
-    )
+    const loadBookDetails = async () => {
+      setLoading(true)
+      setError("")
+
+      try {
+        const [bookResponse, commentsResponse, ratingResponse] =
+          await Promise.all([
+            API.get(`/Book/${id}`),
+            API.get(`/Comment/${id}`),
+            API.get(`/Rating/${id}`),
+          ])
+
+        setBook(bookResponse.data)
+        setComments(commentsResponse.data)
+        setAverageRating(ratingResponse.data.averageRating || 0)
+      } catch (requestError) {
+        setError("Book details could not be loaded. Please try again.")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadBookDetails()
   }, [id])
+
+  const refreshComments = async () => {
+    const response = await API.get(`/Comment/${id}`)
+    setComments(response.data)
+  }
+
+  const refreshRating = async () => {
+    const response = await API.get(`/Rating/${id}`)
+    setAverageRating(response.data.averageRating || 0)
+  }
 
   const handleComment = async () => {
     if (!newComment.trim()) return
-    await API.post(`/Comment/${id}`, JSON.stringify(newComment), {
-      headers: { "Content-Type": "application/json" },
-    })
-    setNewComment("")
-    API.get(`/Comment/${id}`).then((res) => setComments(res.data))
+
+    try {
+      await API.post(`/Comment/${id}`, JSON.stringify(newComment.trim()), {
+        headers: { "Content-Type": "application/json" },
+      })
+      setNewComment("")
+      await refreshComments()
+    } catch (requestError) {
+      setActionMessage("Your comment could not be posted. Please try again.")
+    }
   }
 
   const handleRating = async (stars) => {
     setRating(stars)
-    await API.post(`/Rating/${id}`, stars, {
-      headers: { "Content-Type": "application/json" },
-    })
-    API.get(`/Rating/${id}`).then((res) =>
-      setAverageRating(res.data.averageRating),
-    )
+
+    try {
+      await API.post(`/Rating/${id}`, stars, {
+        headers: { "Content-Type": "application/json" },
+      })
+      await refreshRating()
+    } catch (requestError) {
+      setActionMessage("Your rating could not be saved. Please try again.")
+    }
   }
+
   const handleFavorite = async () => {
-    await API.post(`/Favorite?bookId=${id}`)
-    alert("Added to favorites!")
+    try {
+      await API.post(`/Favorite?bookId=${id}`)
+      setActionMessage("Added to favorites.")
+    } catch (requestError) {
+      setActionMessage("This book could not be added to favorites.")
+    }
   }
+
   const handleOrder = () => {
     navigate("/payment", {
       state: {
@@ -51,260 +97,159 @@ function BookDetails() {
       },
     })
   }
-  if (!book)
+
+  if (loading) {
     return (
-      <div
-        style={{ backgroundColor: "#0f0f0f", minHeight: "100vh" }}
-        className="d-flex justify-content-center align-items-center text-white"
-      >
+      <div className="book-details-loading">
         <div className="spinner-border text-purple" role="status" />
       </div>
     )
+  }
+
+  if (error || !book) {
+    return (
+      <main className="book-details-page">
+        <div className="container py-5">
+          <button className="book-details-back-btn" onClick={() => navigate("/books")}>
+            Back to catalog
+          </button>
+          <p className="comment-empty mt-4">{error || "This book was not found."}</p>
+        </div>
+      </main>
+    )
+  }
 
   return (
-    <div
-      style={{ backgroundColor: "#0f0f0f", minHeight: "100vh", color: "#fff" }}
-    >
-      {/* Navbar */}
-      <nav
-        style={{
-          backgroundColor: "#1a1a1a",
-          borderBottom: "1px solid #2a2a2a",
-        }}
-        className="px-4 py-3 d-flex align-items-center gap-3"
-      >
-        <button
-          onClick={handleFavorite}
-          style={{
-            backgroundColor: "#ff4d4d",
-            border: "none",
-            borderRadius: "8px",
-            padding: "10px 20px",
-            color: "#fff",
-            fontWeight: "bold",
-            cursor: "pointer",
-          }}
-        >
-          ❤️ Add to Favorites
+    <main className="book-details-page">
+      <nav className="book-details-navbar px-4 py-3 gap-3">
+        <button className="book-details-back-btn" onClick={() => navigate("/books")}>
+          Back
         </button>
-        <button
-          onClick={handleOrder}
-          style={{
-            backgroundColor: "#2a2a2a",
-            border: "none",
-            borderRadius: "8px",
-            padding: "10px 20px",
-            color: "#fff",
-            fontWeight: "bold",
-            cursor: "pointer",
-          }}
-        >
-          🛒 Order
+        <button className="book-comment-btn" onClick={handleFavorite}>
+          Add to favorites
         </button>
-        <button
-          className="btn btn-sm"
-          style={{ backgroundColor: "#2a2a2a", color: "#fff", border: "none" }}
-          onClick={() => navigate("/books")}
-        >
-          ← Back
+        <button className="book-comment-btn" onClick={handleOrder}>
+          Order
         </button>
-        <h5 className="mb-0">📚 Book Details</h5>
       </nav>
 
       <div className="container py-5">
-        <div className="row g-5">
-          {/* Book Image */}
-          <div className="col-md-4">
-            <div
-              style={{
-                borderRadius: "16px",
-                overflow: "hidden",
-                boxShadow: "0 0 40px rgba(108,99,255,0.2)",
-              }}
-            >
+        {actionMessage && <p className="comment-empty mb-4">{actionMessage}</p>}
+
+        <div className="book-details-shell">
+          <aside className="book-details-media">
+            <div className="book-details-image">
               {book.imageUrl ? (
-                <img
-                  src={`https://localhost:7012${book.imageUrl}`}
-                  alt={book.title}
-                  style={{ width: "100%", height: "450px", objectFit: "cover" }}
-                />
+                <img src={`https://localhost:7012${book.imageUrl}`} alt={book.title} />
               ) : (
-                <div
-                  style={{
-                    width: "100%",
-                    height: "450px",
-                    backgroundColor: "#1a1a1a",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "80px",
-                  }}
-                >
-                  📖
-                </div>
+                <div className="book-placeholder">No cover</div>
               )}
             </div>
-          </div>
+          </aside>
 
-          {/* Book Info */}
-          <div className="col-md-8">
-            <h1 style={{ fontWeight: "700", fontSize: "2rem" }}>
-              {book.title}
-            </h1>
+          <section className="book-details-card">
+            <div className="book-details-header">
+              <div>
+                <p className="book-details-kicker">
+                  {book.category?.name || "Featured title"}
+                </p>
+                <h1 className="book-details-title">{book.title}</h1>
+              </div>
+              <div className="book-details-score">
+                <span>{Number(averageRating).toFixed(1)}</span>
+                <small>/ 5</small>
+              </div>
+            </div>
 
-            <div className="d-flex gap-3 mb-3">
-              <span
-                style={{
-                  backgroundColor: "#2a2a2a",
-                  padding: "4px 12px",
-                  borderRadius: "20px",
-                  fontSize: "13px",
-                }}
-              >
-                ✍️ {book.author?.name}
+            <div className="book-details-meta">
+              <span className="book-details-pill">
+                <strong>Author</strong> {book.author?.name || "Unknown"}
               </span>
-              <span
-                style={{
-                  backgroundColor: "#2a2a2a",
-                  padding: "4px 12px",
-                  borderRadius: "20px",
-                  fontSize: "13px",
-                }}
-              >
-                📂 {book.category?.name}
+              <span className="book-details-pill">
+                <strong>Year</strong> {book.publishedYear || "Not listed"}
+              </span>
+              <span className="book-details-pill">
+                <strong>Price</strong> ${Number(book.price || 0).toFixed(2)}
               </span>
             </div>
 
-            <p style={{ color: "#aaa", lineHeight: "1.8", fontSize: "15px" }}>
-              {book.description}
+            <p className="book-details-description">
+              {book.description || "No description is available for this book yet."}
             </p>
 
-            {/* Rating Section */}
-            <div
-              style={{
-                backgroundColor: "#1a1a1a",
-                borderRadius: "12px",
-                padding: "20px",
-                marginBottom: "24px",
-              }}
-            >
-              <h6 style={{ color: "#aaa", marginBottom: "12px" }}>
-                RATE THIS BOOK
-              </h6>
-              <div className="d-flex align-items-center gap-3">
-                <div>
+            <section className="book-details-section">
+              <div className="book-section-heading">
+                <h2>Rate this book</h2>
+                <p>Choose from 1 to 5 stars.</p>
+              </div>
+              <div className="book-rating-row">
+                <div className="book-rating-stars">
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <span
+                    <button
+                      aria-label={`Rate ${star} stars`}
+                      className={`book-rating-star ${
+                        star <= (hovered || rating) ? "active" : ""
+                      }`}
                       key={star}
                       onClick={() => handleRating(star)}
                       onMouseEnter={() => setHovered(star)}
                       onMouseLeave={() => setHovered(0)}
-                      style={{
-                        fontSize: "36px",
-                        cursor: "pointer",
-                        color: star <= (hovered || rating) ? "#ffc107" : "#333",
-                        transition: "color 0.15s",
-                      }}
+                      type="button"
                     >
-                      ★
-                    </span>
+                      *
+                    </button>
                   ))}
                 </div>
-                <span style={{ color: "#aaa", fontSize: "14px" }}>
-                  Average:{" "}
-                  <strong style={{ color: "#ffc107" }}>
-                    ⭐ {averageRating} / 5
-                  </strong>
-                </span>
+                <p className="book-rating-note">
+                  Average rating: <strong>{Number(averageRating).toFixed(1)}</strong>
+                </p>
               </div>
-            </div>
+            </section>
 
-            {/* Comments Section */}
-            <div
-              style={{
-                backgroundColor: "#1a1a1a",
-                borderRadius: "12px",
-                padding: "20px",
-              }}
-            >
-              <h6 style={{ color: "#aaa", marginBottom: "16px" }}>
-                COMMENTS ({comments.length})
-              </h6>
+            <section className="book-details-section">
+              <div className="book-section-heading">
+                <h2>Comments</h2>
+                <p>{comments.length} total</p>
+              </div>
 
-              <div
-                style={{
-                  maxHeight: "250px",
-                  overflowY: "auto",
-                  marginBottom: "16px",
-                }}
-              >
+              <div className="book-comments-list">
                 {comments.length === 0 ? (
-                  <p
-                    style={{
-                      color: "#555",
-                      textAlign: "center",
-                      padding: "20px 0",
-                    }}
-                  >
-                    No comments yet. Be the first!
-                  </p>
+                  <p className="comment-empty">No comments yet. Be the first.</p>
                 ) : (
-                  comments.map((c) => (
-                    <div
-                      key={c.id}
-                      style={{
-                        backgroundColor: "#252525",
-                        borderRadius: "8px",
-                        padding: "12px 16px",
-                        marginBottom: "10px",
-                      }}
-                    >
-                      <p style={{ margin: 0, fontSize: "14px" }}>{c.content}</p>
-                      <small style={{ color: "#666" }}>
-                        {new Date(c.createdAt).toLocaleDateString()}
-                      </small>
-                    </div>
+                  comments.map((comment) => (
+                    <article className="comment-item" key={comment.id}>
+                      <p>{comment.content}</p>
+                      {comment.createdAt && (
+                        <small>{new Date(comment.createdAt).toLocaleDateString()}</small>
+                      )}
+                    </article>
                   ))
                 )}
               </div>
 
-              <div className="d-flex gap-2">
+              <div className="book-comment-input-row">
                 <input
+                  className="book-comment-input"
                   type="text"
-                  style={{
-                    flex: 1,
-                    backgroundColor: "#252525",
-                    border: "1px solid #333",
-                    borderRadius: "8px",
-                    padding: "10px 14px",
-                    color: "#fff",
-                    outline: "none",
-                  }}
                   placeholder="Write a comment..."
                   value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleComment()}
+                  onChange={(event) => setNewComment(event.target.value)}
+                  onKeyDown={(event) => event.key === "Enter" && handleComment()}
                 />
                 <button
+                  className="book-comment-btn"
+                  disabled={!newComment.trim()}
                   onClick={handleComment}
-                  style={{
-                    backgroundColor: "#6c63ff",
-                    border: "none",
-                    borderRadius: "8px",
-                    padding: "10px 20px",
-                    color: "#fff",
-                    fontWeight: "bold",
-                    cursor: "pointer",
-                  }}
+                  type="button"
                 >
                   Post
                 </button>
               </div>
-            </div>
-          </div>
+            </section>
+          </section>
         </div>
       </div>
-    </div>
+    </main>
   )
 }
 
