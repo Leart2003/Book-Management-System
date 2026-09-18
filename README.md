@@ -73,6 +73,4 @@ dotnet run --project src/API
 <pre><code>dotnet test
 </code></pre>
 
-<h2>What I Learned</h2>
-<p>Building this project strengthened my understanding of Clean Architecture, RESTful API design, and how to structure a scalable backend with proper separation of concerns between controllers, services, and data access.</p>
 
