@@ -14,7 +14,7 @@
   <li><strong>EF Core Code First</strong> with migrations</li>
   <li><strong>Unit Tests</strong> (xUnit + Moq) covering services and controllers</li>
   <li><strong>XML documentation</strong> across the codebase</li>
-  <li><strong>Dockerized</strong> with a multi-stage Dockerfile and Docker Compose (API + SQL Server), including automatic migrations on startup</li>
+  
 </ul>
 
 <h2>Tech Stack</h2>
@@ -28,7 +28,7 @@
     <tr><td>Database</td><td>SQL Server</td></tr>
     <tr><td>Auth</td><td>ASP.NET Core Identity</td></tr>
     <tr><td>Testing</td><td>xUnit, Moq</td></tr>
-    <tr><td>Containerization</td><td>Docker, Docker Compose</td></tr>
+  
     <tr><td>Architecture</td><td>Clean Architecture, Repository Pattern</td></tr>
   </tbody>
 </table>
@@ -58,14 +58,14 @@ BookManagementSystem/
 <pre><code>git clone https://github.com/&lt;your-username&gt;/BookManagementSystem.git
 cd BookManagementSystem
 <h3>Run locally</h3>
-<pre><code>Make sure to create a database named :"BookMangment" and then put your database info on the connection strinf"Data Source=ServerName;Initial Catalog=SmartCity;Integrated Security=True; TrustServerCertificate=True"
+<pre><code>Make sure to create a database named :"BookMangment" and then put your database info on the connection string: "Data Source=ServerName;Initial Catalog=SmartCity;Integrated Security=True; TrustServerCertificate=True"
 cd BookManagementSystem
 dotnet ef database update
 
 dotnet run --project src/API
 </code></pre>
 
-<h3>Run with Docker</h3>
+
 
 <p>This spins up the API and SQL Server together, applying EF Core migrations automatically on startup.</p>
 
