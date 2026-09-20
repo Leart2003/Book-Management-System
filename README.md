@@ -1,4 +1,4 @@
-<h1>📚 Book Management System</h1>
+<h1></h1> Book Management System</h1>
 
 <p>A backend API for managing books, authors, and comments — built with <strong>ASP.NET Core Web API</strong>, <strong>Entity Framework Core</strong>, and <strong>SQL Server</strong>, following <strong>Clean Architecture</strong> principles.</p>
 
@@ -41,6 +41,7 @@ BookManagementSystem/
 │   ├── Application/      # Services, DTOs, interfaces
 │   ├── Domain/            # Entities, core business logic
 │   └── Infrastructure/   # EF Core, repositories, Identity
+    └──Frontend           #ReactJs
 ├── tests/
 │   └── UnitTests/        # xUnit + Moq test suites
 └── README.md
